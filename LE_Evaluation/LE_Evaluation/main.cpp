@@ -2,10 +2,14 @@
 
 double evaluate(cv::Mat img1, cv::Mat img2);
 
-int main(void)
+int main(int argc, char* argv[])
 {
-	cv::String path1 = "../input/synth_21.jpg";
-	cv::String path2 = "../input/synth_21_r.jpg";
+	if(argc <= 1){
+		std::cout<<"bad arguments. (imgName1, imgName2)"<<std::endl;
+		return -1;
+	}
+	cv::String path1 = argv[1];
+	cv::String path2 = argv[2];
 	cv::Mat img1 = cv::imread(path1);
 	cv::Mat img2 = cv::imread(path2);
 	cv::imshow("img1", img1);
@@ -29,8 +33,9 @@ double evaluate(cv::Mat img1, cv::Mat img2)
 	gf2.optimize().convertTo(img2_sh,  CV_8UC1, 255);
 
 	cv::imshow("img1_sh", img1_sh);
+	cv::resize(img2_sh, img2_sh, cv::Size(img1_sh.cols, img1_sh.rows));
 	cv::imshow("img2_sh", img2_sh);
-
+	cv::waitKey();
 
 	cv::Mat absDiff;
 	cv::absdiff(img1_sh, img2_sh, absDiff);
